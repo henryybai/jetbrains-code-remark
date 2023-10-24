@@ -39,3 +39,5 @@ patchPluginXml {
       <li>2021-10-20: Right click menu</li> 
       <li>2021-10-01: First version</li>"""
 }
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
