@@ -91,13 +91,13 @@ public class CodeRemarkBulkFileListener implements BulkFileListener {
 
         final String oldContentHash = CodeRemark.createContentHash(
                 VirtualFileUtils.getRelativePath(project, oldPath));
-        final List<CodeRemark> codeRemarks = codeRemarkRepository.list(oldFileName, oldContentHash);
+        final List<CodeRemark> codeRemarks = codeRemarkRepository.list(project, oldFileName, oldContentHash);
 
         if (!codeRemarks.isEmpty()) {
 
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 // Remove old coderemarks
-                codeRemarkRepository.remove(oldFileName, oldContentHash);
+                codeRemarkRepository.remove(project, oldFileName, oldContentHash);
                 // Save new coderemarks
                 final String newFileName = newFile.getName();
                 final String newContentHash = CodeRemark.createContentHash(project, newFile);
@@ -105,7 +105,7 @@ public class CodeRemarkBulkFileListener implements BulkFileListener {
                     codeRemark.setFileName(newFileName);
                     codeRemark.setContentHash(newContentHash);
                 }
-                codeRemarkRepository.saveBatch(codeRemarks);
+                codeRemarkRepository.saveBatch(project, codeRemarks);
             });
 
         }

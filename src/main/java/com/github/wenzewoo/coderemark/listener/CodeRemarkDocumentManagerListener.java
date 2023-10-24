@@ -76,7 +76,7 @@ public class CodeRemarkDocumentManagerListener implements FileDocumentManagerLis
                 final CodeRemarkRepository codeRemarkRepository = CodeRemarkRepositoryFactory.getInstance(project);
                 WriteCommandAction.runWriteCommandAction(project, () -> {
                     codeRemarkRepository.remove(project, file);
-                    codeRemarkRepository.saveBatch(codeRemarks);
+                    codeRemarkRepository.saveBatch(project, codeRemarks);
                     getPublisher(project).codeRemarkChanged(project, file);
                 });
             }

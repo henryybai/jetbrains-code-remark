@@ -77,69 +77,70 @@ public class CodeRemarkPersistentStateRepository
         return Comparator.comparing(CodeRemark::getFileName).thenComparing(CodeRemark::getLineNumber);
     }
 
-    private Predicate<CodeRemark> stateFilter(@NotNull CodeRemark codeRemark) {
-        return this.stateFilter(codeRemark.getFileName(), codeRemark.getContentHash(), codeRemark.getLineNumber());
+    private Predicate<CodeRemark> stateFilter(Project project, @NotNull CodeRemark codeRemark) {
+        return this.stateFilter(project, codeRemark.getFileName(), codeRemark.getContentHash(), codeRemark.getLineNumber());
     }
 
-    private Predicate<CodeRemark> stateFilter(String fileName, String contentHash, Integer lineNumber) {
+    private Predicate<CodeRemark> stateFilter(Project project, String fileName, String contentHash, Integer lineNumber) {
         return (codeRemark) -> {
+            String currentBranch = GitUtils.getCurrentBranchName(project);
+            boolean branchMatch = currentBranch == null || currentBranch.equals(codeRemark.getBranch());
             final boolean fileNameMatch = StringUtils.isEmpty(fileName) || StringUtils.equals(fileName, codeRemark.getFileName());
             final boolean contentHashMatch = StringUtils.isEmpty(contentHash) || StringUtils.equals(contentHash, codeRemark.getContentHash());
             final boolean lineNumberMatch = null == lineNumber || Objects.equals(lineNumber, codeRemark.getLineNumber());
-            return fileNameMatch && contentHashMatch && lineNumberMatch;
+            return branchMatch && fileNameMatch && contentHashMatch && lineNumberMatch;
         };
     }
 
 
     @Override
-    public List<CodeRemark> list(@NotNull final String fileName, @NotNull final String contentHash) {
-        final Predicate<CodeRemark> stateFilter = this.stateFilter(fileName, contentHash, null);
+    public List<CodeRemark> list(Project project, @NotNull final String fileName, @NotNull final String contentHash) {
+        final Predicate<CodeRemark> stateFilter = this.stateFilter(project, fileName, contentHash, null);
         return this.stateStream().filter(stateFilter).sorted(this.stateComparator()).collect(Collectors.toList());
     }
 
     @Override
-    public boolean exists(@NotNull final String fileName, @NotNull final String contentHash) {
-        final Predicate<CodeRemark> stateFilter = this.stateFilter(fileName, contentHash, null);
+    public boolean exists(Project project, @NotNull final String fileName, @NotNull final String contentHash) {
+        final Predicate<CodeRemark> stateFilter = this.stateFilter(project, fileName, contentHash, null);
         return this.stateStream().anyMatch(stateFilter);
     }
 
     @Override
-    public CodeRemark get(@NotNull final String fileName, @NotNull final String contentHash, final int lineNumber) {
-        final Predicate<CodeRemark> stateFilter = this.stateFilter(fileName, contentHash, lineNumber);
+    public CodeRemark get(Project project, @NotNull final String fileName, @NotNull final String contentHash, final int lineNumber) {
+        final Predicate<CodeRemark> stateFilter = this.stateFilter(project, fileName, contentHash, lineNumber);
         return this.stateStream().filter(stateFilter).findFirst().orElse(null);
     }
 
     @Override
     public void save(Project project, final CodeRemark codeRemark) {
         String currentBranch = GitUtils.getCurrentBranchName(project);
-        System.out.println("currentBranch===="+currentBranch);
         codeRemark.setBranch(currentBranch);
-        this.removeWith(codeRemark);
+        this.removeWith(project, codeRemark);
         this.state.getProjectCodeRemarks().add(codeRemark);
     }
 
     @Override
-    public void saveBatch(final List<CodeRemark> codeRemarks) {
+    public void saveBatch(Project project, final List<CodeRemark> codeRemarks) {
         for (final CodeRemark codeRemark : codeRemarks) {
-            this.removeWith(codeRemark);
+            this.removeWith(project, codeRemark);
         }
         this.state.getProjectCodeRemarks().addAll(codeRemarks);
     }
 
-    void removeWith(final CodeRemark codeRemark) {
-        final Predicate<CodeRemark> stateFilter = this.stateFilter(codeRemark);
+    void removeWith(Project project, final CodeRemark codeRemark) {
+        final Predicate<CodeRemark> stateFilter = this.stateFilter(project, codeRemark);
         this.state.getProjectCodeRemarks().removeIf(stateFilter);
     }
 
     @Override
-    public void remove(@NotNull final String fileName, @NotNull final String contentHash, final int lineNumber) {
-        final Predicate<CodeRemark> stateFilter = this.stateFilter(fileName, contentHash, lineNumber);
+    public void remove(Project project, @NotNull final String fileName, @NotNull final String contentHash, final int lineNumber) {
+        final Predicate<CodeRemark> stateFilter = this.stateFilter(project, fileName, contentHash, lineNumber);
         this.state.getProjectCodeRemarks().removeIf(stateFilter);
     }
 
     @Override
-    public void remove(@NotNull final String fileName, @NotNull final String contentHash) {
-        final Predicate<CodeRemark> stateFilter = this.stateFilter(fileName, contentHash, null);
+    public void remove(Project project, @NotNull final String fileName, @NotNull final String contentHash) {
+        final Predicate<CodeRemark> stateFilter = this.stateFilter(project, fileName, contentHash, null);
         this.state.getProjectCodeRemarks().removeIf(stateFilter);
     }
 }

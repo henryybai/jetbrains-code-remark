@@ -74,7 +74,7 @@ public class CodeRemarkDataMigrationProjectListener implements ProjectManagerLis
                 }
             });
             if (!codeRemarks.isEmpty()) {
-                CodeRemarkRepositoryFactory.getInstance(project).saveBatch(codeRemarks);
+                CodeRemarkRepositoryFactory.getInstance(project).saveBatch(project, codeRemarks);
             }
             // Delete old persistent dir.
             // Files.deleteIfExists(oldPersistentDir);

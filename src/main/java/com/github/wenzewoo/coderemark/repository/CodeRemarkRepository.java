@@ -37,40 +37,40 @@ public interface CodeRemarkRepository {
 
 
     default List<CodeRemark> list(@NotNull final Project project, @NotNull final VirtualFile file) {
-        return list(file.getName(), CodeRemark.createContentHash(project, file));
+        return list(project, file.getName(), CodeRemark.createContentHash(project, file));
     }
 
-    List<CodeRemark> list(@NotNull String fileName, @NotNull String contentHash);
+    List<CodeRemark> list(Project project, @NotNull String fileName, @NotNull String contentHash);
 
 
     default boolean exists(@NotNull final Project project, @NotNull final VirtualFile file) {
-        return exists(file.getName(), CodeRemark.createContentHash(project, file));
+        return exists(project, file.getName(), CodeRemark.createContentHash(project, file));
     }
 
-    boolean exists(@NotNull String fileName, @NotNull String contentHash);
+    boolean exists(Project project, @NotNull String fileName, @NotNull String contentHash);
 
 
     default CodeRemark get(@NotNull Project project, @NotNull VirtualFile file, int lineNumber) {
-        return get(file.getName(), CodeRemark.createContentHash(project, file), lineNumber);
+        return get(project, file.getName(), CodeRemark.createContentHash(project, file), lineNumber);
     }
 
-    CodeRemark get(@NotNull String fileName, @NotNull String contentHash, int lineNumber);
+    CodeRemark get(Project project, @NotNull String fileName, @NotNull String contentHash, int lineNumber);
 
     void save(Project project, CodeRemark codeRemark);
 
-    void saveBatch(List<CodeRemark> codeRemarks);
+    void saveBatch(Project project, List<CodeRemark> codeRemarks);
 
 
     default void remove(@NotNull Project project, @NotNull VirtualFile file, int lineNumber) {
-        remove(file.getName(), CodeRemark.createContentHash(project, file), lineNumber);
+        remove(project, file.getName(), CodeRemark.createContentHash(project, file), lineNumber);
     }
 
-    void remove(@NotNull String fileName, @NotNull String contentHash, int lineNumber);
+    void remove(Project project, @NotNull String fileName, @NotNull String contentHash, int lineNumber);
 
 
     default void remove(@NotNull Project project, @NotNull VirtualFile file) {
-        remove(file.getName(), CodeRemark.createContentHash(project, file));
+        remove(project, file.getName(), CodeRemark.createContentHash(project, file));
     }
 
-    void remove(@NotNull String fileName, @NotNull String contentHash);
+    void remove(Project project, @NotNull String fileName, @NotNull String contentHash);
 }
