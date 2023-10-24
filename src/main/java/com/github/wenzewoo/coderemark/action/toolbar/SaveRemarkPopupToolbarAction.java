@@ -59,7 +59,7 @@ public class SaveRemarkPopupToolbarAction extends BasePopupToolbarAction {
 
         WriteCommandAction.runWriteCommandAction(event.getProject(), () -> {
             // Save to repository.
-            CodeRemarkRepositoryFactory.getInstance(event.getProject()).save(
+            CodeRemarkRepositoryFactory.getInstance(event.getProject()).save(event.getProject(),
                     new CodeRemark(event.getProject(), event.getFile(), event.getLineNumber(), text));
             getPublisher().codeRemarkChanged(event.getProject(), event.getFile());
         });

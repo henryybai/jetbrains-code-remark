@@ -56,7 +56,7 @@ public interface CodeRemarkRepository {
 
     CodeRemark get(@NotNull String fileName, @NotNull String contentHash, int lineNumber);
 
-    void save(CodeRemark codeRemark);
+    void save(Project project, CodeRemark codeRemark);
 
     void saveBatch(List<CodeRemark> codeRemarks);
 

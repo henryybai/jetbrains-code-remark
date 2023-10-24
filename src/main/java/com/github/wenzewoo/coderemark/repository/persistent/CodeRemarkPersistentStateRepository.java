@@ -26,10 +26,12 @@ package com.github.wenzewoo.coderemark.repository.persistent;
 
 import com.github.wenzewoo.coderemark.CodeRemark;
 import com.github.wenzewoo.coderemark.repository.CodeRemarkRepository;
+import com.github.wenzewoo.coderemark.toolkit.GitUtils;
 import com.github.wenzewoo.coderemark.toolkit.StringUtils;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -108,7 +110,10 @@ public class CodeRemarkPersistentStateRepository
     }
 
     @Override
-    public void save(final CodeRemark codeRemark) {
+    public void save(Project project, final CodeRemark codeRemark) {
+        String currentBranch = GitUtils.getCurrentBranchName(project);
+        System.out.println("currentBranch===="+currentBranch);
+        codeRemark.setBranch(currentBranch);
         this.removeWith(codeRemark);
         this.state.getProjectCodeRemarks().add(codeRemark);
     }

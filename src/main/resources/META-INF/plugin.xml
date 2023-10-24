@@ -69,7 +69,7 @@
          on how to target different products -->
     <idea-version since-build="203"/>
     <depends>com.intellij.modules.lang</depends>
-
+    <depends>Git4Idea</depends>
 
     <projectListeners>
         <listener topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"

@@ -5,7 +5,6 @@ plugins {
 
 group 'com.github.wenzewoo.coderemark'
 version '1.4.0'
-
 repositories {
 //    mavenCentral()
     maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
@@ -24,6 +23,7 @@ configurations {
 intellij {
     version = '2022.2'
     updateSinceUntilBuild = false
+    plugins = ['Git4Idea']
 }
 patchPluginXml {
     changeNotes = """

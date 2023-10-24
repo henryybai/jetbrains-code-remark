@@ -50,6 +50,7 @@ public class CodeRemark implements Serializable, Navigatable {
     private String contentHash; // relativePath.md5() or fileBody.bytes().md5()
     private int lineNumber;
     private String text;
+    private String branch;
 
     private transient OpenFileDescriptor target;
 
@@ -168,6 +169,14 @@ public class CodeRemark implements Serializable, Navigatable {
 
     public void setText(final String text) {
         this.text = text;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(final String branch) {
+        this.branch = branch;
     }
 
     @Override
