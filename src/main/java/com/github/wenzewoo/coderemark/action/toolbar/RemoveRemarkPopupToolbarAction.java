@@ -38,7 +38,7 @@ import static com.github.wenzewoo.coderemark.message.CodeRemarkBundle.message;
 public class RemoveRemarkPopupToolbarAction extends BasePopupToolbarAction {
 
     public RemoveRemarkPopupToolbarAction() {
-        super(message("removeRemark.confirm"), AllIcons.Actions.Rollback);
+        super(message("removeRemark.confirm"), AllIcons.Actions.GC);
     }
 
     @Override

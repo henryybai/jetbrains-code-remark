@@ -40,12 +40,12 @@ import static com.github.wenzewoo.coderemark.message.CodeRemarkBundle.message;
 public class SaveRemarkPopupToolbarAction extends BasePopupToolbarAction {
 
     public SaveRemarkPopupToolbarAction() {
-        super(message("addRemark.confirm"), Actions.CheckOut);
+        super(message("addRemark.confirm"), Actions.MenuSaveall);
     }
 
     @Override
     Shortcut getShortcut() {
-        return KeyboardShortcut.fromString("shift ENTER");
+        return KeyboardShortcut.fromString("ENTER");
     }
 
     @Override
